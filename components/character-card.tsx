@@ -23,14 +23,14 @@ export function CharacterCard({ character, onSelect }: CharacterCardProps) {
     setFavorite(isFavorite(character.codePoint))
   }, [character.codePoint])
 
-  const copyToClipboard = () => {
+  const copyToClipboard = (e: any) => {
+    e.stopPropagation()
     navigator.clipboard.writeText(character.symbol)
     setCopied(true)
     setTimeout(() => setCopied(false), 1500)
-    onSelect()
   }
 
-  const handleFavoriteClick = (e: React.MouseEvent) => {
+  const handleFavoriteClick = (e: any) => {
     e.stopPropagation() // Prevent triggering the card click
     const newStatus = toggleFavorite(character.codePoint)
     setFavorite(newStatus)
@@ -46,24 +46,31 @@ export function CharacterCard({ character, onSelect }: CharacterCardProps) {
         copied && "border-green-500",
         favorite && "border-yellow-500",
       )}
-      onClick={copyToClipboard}
+      onClick={onSelect}
     >
       <CardContent className="p-4 flex flex-col items-center justify-center">
         <div className="text-3xl mb-2">{displaySymbol}</div>
         <div className="text-xs text-gray-400 text-center truncate w-full">{character.name}</div>
         <div className="text-xs text-gray-500 mt-1">{character.code}</div>
-        <div className="absolute top-2 right-2 opacity-70">
-          {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4 text-gray-500" />}
-        </div>
         <button
           className={cn(
-            "absolute top-2 left-2 p-1 rounded-full",
+            "absolute top-2 left-2 p-1 rounded-full z-10",
             favorite ? "text-yellow-400" : "text-gray-500 hover:text-gray-300",
           )}
           onClick={handleFavoriteClick}
           aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
         >
           <Star className="h-4 w-4" fill={favorite ? "currentColor" : "none"} />
+        </button>
+        <button
+          className={cn(
+            "absolute top-2 right-2 p-1 rounded-full z-10",
+            copied ? "text-green-500" : "text-gray-500 hover:text-gray-300",
+          )}
+          onClick={copyToClipboard}
+          aria-label={copied ? "Copied" : "Copy to clipboard"}
+        >
+          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
         </button>
       </CardContent>
     </Card>

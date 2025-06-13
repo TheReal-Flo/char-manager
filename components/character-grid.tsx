@@ -66,7 +66,6 @@ export default function CharacterGrid({ initialCharacters, searchQuery = "" }: C
   const filterCharacters = (chars: Character[], query: string, onlyFavorites: boolean) => {
     let filtered = [...chars]
 
-    // Filter by search query
     if (query) {
       filtered = filtered.filter((char) => {
         const note = getNote(char.codePoint)
@@ -78,14 +77,17 @@ export default function CharacterGrid({ initialCharacters, searchQuery = "" }: C
       })
     }
 
-    // Filter by favorites
     if (onlyFavorites) {
       filtered = sortWithFavoritesFirst(filtered).filter((_, index) => index < charactersPerPage)
     }
 
     setFilteredCharacters(filtered)
-    setCurrentPage(1)
   }
+
+  // Add separate effects for handling page resets
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery, showOnlyFavorites])
 
   const indexOfLastCharacter = currentPage * charactersPerPage
   const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage
