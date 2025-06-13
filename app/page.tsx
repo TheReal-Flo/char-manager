@@ -13,10 +13,13 @@ export default async function Home() {
           <p className="text-gray-400 mb-6 text-center">Browse, search, manage, and copy Unicode characters with ease</p>
           <SearchBar />
         </header>
-
         <main>
           <CharacterGrid initialCharacters={getFallbackCharacters()} />
         </main>
+        <footer className="text-center py-4 text-sm text-muted-foreground">
+          © 2025 Florian Reintgen. All rights reserved.<br />
+          <a href="https://github.com/TheReal-Flo/char-manager" target="_blank" className="underline">View code on GitHub</a>
+        </footer>
       </div>
     </div>
   )
